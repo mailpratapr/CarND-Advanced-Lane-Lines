@@ -79,8 +79,12 @@ for i,fname in enumerate(test_images):
         img=cv2.drawChessboardCorners(fname, (9,6), corners, ret)
         display.append(img)
 plot_images(display)
-
 ```
+```python
+undistort_list=(list(map(cal_undistort,test_images)))
+plot_images(undistort_list)
+```
+
 ## Color Filtering
 * The color information can easily be inferred in HLS color space compared to RGB
 * The thresholding functions just give out the binary image with ones and zeros.
