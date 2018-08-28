@@ -1,4 +1,4 @@
-**Advanced Lane Finding Project**
+#Advanced Lane Finding Project
 
 The goals / steps of this project are the following:
 
@@ -240,9 +240,9 @@ plt.title('Binary Warped Image')
 
 ![png](output_images/binarywarped.png)
 
-## Identify lane-line pixels and fit their positions with a polynomial
+# Identify lane-line pixels and fit their positions with a polynomial
 
-# Identify lane-line pixels
+## Identify lane-line pixels
 * The first step we'll take is to split the histogram into two sides, one for each lane line.
 * Detect peaks in this histogram that will be the x-position of the base of the lane lines.
 * Set up what the windows and loop through each window.
@@ -252,7 +252,7 @@ plt.title('Binary Warped Image')
 * Append these to our `lists left_lane_inds` and `right_lane_inds`.
 * If the number of pixels are greater than `minpix`, re-center our window based on the mean position of these pixels.
 
-# Fit polynomial
+## Fit polynomial
 * Fit a polynomial to all the relevant pixels you've found in your sliding windows using `fit_polynomial()`.
 * The area between the left and right equation were plotted green.
 * Inverse warp perspective transform to plot it back in the actual image.
@@ -489,7 +489,7 @@ HTML("""
 </video>
 """.format(output))
 ```
-## Discussion
+# Discussion
 * The pipeline fails in Challenge Videos.
 * By improving the filters it can perform well.
 * The model does not performs in videos taken at night.
