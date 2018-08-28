@@ -12,6 +12,15 @@ The goals / steps of this project are the following:
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
 ## First, I'll compute the camera calibration using chessboard images
+
+* Camera has been calibrated using chessboard images found on the camera_cal folder.
+* The number of corners in x axis and y axis are stored in the camera matrix array.
+* camera matrix is useful in undistorting the image.
+
+I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
+
+I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
+
 ```python
 # import numpy as np
 import cv2
@@ -71,6 +80,10 @@ for i,fname in enumerate(test_images):
 plot_images(display)
 
 ```
+## Color Filtering
+* The color information can easily be inferred in HLS color space compared to RGB
+* The thresholding functions just give out the binary image with ones and zeros.
+
 ```python
 def cal_undistort(img):
     # Use cv2.calibrateCamera() and cv2.undistort()
@@ -130,15 +143,8 @@ def pipeline(img, s_thresh=(170, 255), sx_thresh=(20, 100)):
     color_binary = np.dstack(( np.zeros_like(sxbinary), sxbinary, s_binary)) * 255
     return color_binary
 ```
-### Camera Calibration
+### Undistorted image
 
-#### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
-
-The code for this step is contained in the first code cell of the IPython notebook located in "./examples/example.ipynb" (or in lines # through # of the file called `some_file.py`).  
-
-I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
-
-I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
 ```python
 img = plt.imread("test_images/test6.jpg")
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
