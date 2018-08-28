@@ -81,10 +81,14 @@ for i,fname in enumerate(test_images):
         display.append(img)
 plot_images(display)
 ```
+
+![png](output_images/colour_pattern.png)
 ```python
 undistort_list=(list(map(cal_undistort,test_images)))
 plot_images(undistort_list)
 ```
+
+![png](output_images/undistort.png)
 
 ## Color Filtering
 * The color information can easily be inferred in HLS color space compared to RGB
@@ -158,6 +162,9 @@ undist = cv2.undistort(img, mtx, dist, None, mtx)
 plt.imshow(undist)
 plt.show()
 ```
+
+![png](output_images/undistorted.png)
+
 ```python
 grad_binary = abs_sobel_thresh(undist, orient='x', thresh_min=20, thresh_max=100)
 mag_binary = mag_thresh(undist, sobel_kernel=3, mag_thresh=(30, 100))
@@ -177,6 +184,8 @@ ax4.imshow(result)
 ax4.set_title("Color Threshold",fontsize=40)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 ```
+
+![png](output_images/pipeline.png)
 
 ```python
 img_size = (img.shape[1],img.shape[0])
@@ -203,6 +212,8 @@ binary_warped = cv2.warpPerspective(binary, M, img_size, flags=cv2.INTER_LINEAR)
 plt.imshow(binary_warped, cmap='gray')
 plt.title('Binary Warped Image')
 ```
+
+![png](output_images/binarywarped.png)
 
 ```python
 import numpy as np
@@ -393,6 +404,9 @@ class Lane:
 ld = Lane(gray)
 plt.imshow(ld.curvature(img))
 ```
+
+![png](output_images/advancedlane.png)
+
 ```python
 from moviepy.editor import VideoFileClip
 white_output = 'project_video_output.mp4'
