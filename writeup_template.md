@@ -187,6 +187,31 @@ plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 
 ![png](output_images/pipeline.png)
 
+### Perspective transform
+The code for my perspective transform includes a function called `cv2.warpPerspective()`. The `cv2.warpPerspective()` function takes as inputs an image (img), as well as source (src) and destination (dst) points. I chose the hardcode the source and destination points in the following manner:
+```python
+src = np.float32(
+    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
+    [((img_size[0] / 6) - 10), img_size[1]],
+    [(img_size[0] * 5 / 6) + 60, img_size[1]],
+    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
+dst = np.float32(
+    [[(img_size[0] / 4), 0],
+    [(img_size[0] / 4), img_size[1]],
+    [(img_size[0] * 3 / 4), img_size[1]],
+    [(img_size[0] * 3 / 4), 0]])
+```
+This resulted in the following source and destination points:
+
+| Source        | Destination   | 
+|:-------------:|:-------------:| 
+| 585, 460      | 320, 0        | 
+| 203, 720      | 320, 720      |
+| 1127, 720     | 960, 720      |
+| 695, 460      | 960, 0        |
+
+I verified that my perspective transform was working as expected by drawing the src and dst points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+
 ```python
 img_size = (img.shape[1],img.shape[0])
 
@@ -214,6 +239,23 @@ plt.title('Binary Warped Image')
 ```
 
 ![png](output_images/binarywarped.png)
+
+## Identify lane-line pixels and fit their positions with a polynomial
+
+# Identify lane-line pixels
+* The first step we'll take is to split the histogram into two sides, one for each lane line.
+* Detect peaks in this histogram that will be the x-position of the base of the lane lines.
+* Set up what the windows and loop through each window.
+* Find the boundaries of our current window. This is based on a combination of the current window's starting point (`leftx_current` and `rightx_current`), as well as the margin you set in the hyperparameters.
+* Use `cv2.rectangle()` to draw these window boundaries onto our visualization image.
+* Find out which activated pixels from `nonzeroy` and `nonzerox` that actually fall into the window.
+* Append these to our `lists left_lane_inds` and `right_lane_inds`.
+* If the number of pixels are greater than `minpix`, re-center our window based on the mean position of these pixels.
+
+# Fit polynomial
+* Fit a polynomial to all the relevant pixels you've found in your sliding windows using `fit_polynomial()`.
+* The area between the left and right equation were plotted green.
+* Inverse warp perspective transform to plot it back in the actual image.
 
 ```python
 import numpy as np
@@ -400,7 +442,13 @@ class Lane:
         result = self.draw_curves(warped_img,img,curvature)
         return result
 ```
+## Radius of curvature
+To measure the radius of curvature closest to your vehicle, you could evaluate the formula above at the y value corresponding to the bottom of your image `yvalue = image.shape[0]`.
 ```python
+left_curverad = ((1 + (2*left_fit[0]*y_eval + left_fit[1])**2)**1.5) / np.absolute(2*left_fit[0])
+right_curverad = ((1 + (2*right_fit[0]*y_eval + right_fit[1])**2)**1.5) / np.absolute(2*right_fit[0])
+```
+```python   
 ld = Lane(gray)
 plt.imshow(ld.curvature(img))
 ```
@@ -441,3 +489,7 @@ HTML("""
 </video>
 """.format(output))
 ```
+## Discussion
+* The pipeline fails in Challenge Videos.
+* By improving the filters it can perform well.
+* The model does not performs in videos taken at night.
