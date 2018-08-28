@@ -392,6 +392,7 @@ white_output = 'project_video_output.mp4'
 clip1 = VideoFileClip("project_video.mp4")
 white_clip = clip1.fl_image(ld.curvature) #NOTE: this function expects color images!!
 %time white_clip.write_videofile(white_output, audio=False)
+```
 
     [MoviePy] >>>> Building video project_video_output.mp4
     [MoviePy] Writing video project_video_output.mp4
@@ -401,7 +402,7 @@ white_clip = clip1.fl_image(ld.curvature) #NOTE: this function expects color ima
 
     CPU times: user 1min 54s, sys: 3.37 s, total: 1min 57s
     Wall time: 4min 7s
-```
+
 
 ```python
 from IPython.display import HTML
